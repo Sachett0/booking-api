@@ -1,10 +1,10 @@
 import Fastify, { type FastifyServerOptions } from "fastify";
 
 /**
- * Monta a aplicação, mas NÃO a coloca no ar.
+ * Builds the application but does NOT start listening.
  *
- * Separar "montar" (app.ts) de "ligar" (server.ts) permite que os testes
- * criem a app e façam requisições direto nela, sem abrir uma porta de rede.
+ * Keeping "build" (app.ts) apart from "start" (server.ts) lets tests create
+ * the app and send requests straight to it, without opening a network port.
  */
 export function buildApp(options: FastifyServerOptions = {}) {
   const app = Fastify(options);

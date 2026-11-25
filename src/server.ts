@@ -4,7 +4,7 @@ const PORT = Number(process.env.PORT ?? 3333);
 
 const app = buildApp({ logger: true });
 
-// Encerra com calma no Ctrl+C: termina as requisições em andamento antes de sair.
+// Graceful shutdown on Ctrl+C: finish in-flight requests before exiting.
 async function shutdown() {
   await app.close();
   process.exit(0);
