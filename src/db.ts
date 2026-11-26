@@ -9,6 +9,8 @@ import { config } from "./config.ts";
  */
 export const sql = postgres(config.databaseUrl, {
   max: 10,
+  // Columns come back in camelCase: `created_at` becomes `createdAt`.
+  transform: postgres.camel,
   // Silence NOTICE messages such as "relation already exists, skipping".
   onnotice: () => {},
 });

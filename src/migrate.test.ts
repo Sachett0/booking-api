@@ -8,14 +8,15 @@ afterAll(async () => {
 
 describe("database migrations", () => {
   it("creates the resources and bookings tables", async () => {
-    const rows = await sql<{ table_name: string }[]>`
+    // The camelCase transform in db.ts turns `table_name` into `tableName`.
+    const rows = await sql<{ tableName: string }[]>`
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'public'
       ORDER BY table_name
     `;
 
-    expect(rows.map((row) => row.table_name)).toEqual([
+    expect(rows.map((row) => row.tableName)).toEqual([
       "bookings",
       "resources",
       "schema_migrations",

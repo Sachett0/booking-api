@@ -2,7 +2,7 @@ import { buildApp } from "./app.ts";
 import { config } from "./config.ts";
 import { sql } from "./db.ts";
 
-const app = buildApp({ logger: true });
+const app = buildApp({ sql }, { logger: true });
 
 // Graceful shutdown on Ctrl+C: finish in-flight requests, then close the
 // database pool before exiting.

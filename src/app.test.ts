@@ -1,12 +1,17 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildApp } from "./app.ts";
+import { sql } from "./db.ts";
+
+afterAll(async () => {
+  await sql.end();
+});
 
 describe("GET /health", () => {
   let app: ReturnType<typeof buildApp>;
 
   // Each test gets a fresh app so tests never share state.
   beforeEach(() => {
-    app = buildApp();
+    app = buildApp({ sql });
   });
 
   afterEach(async () => {
