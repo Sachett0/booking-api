@@ -30,5 +30,6 @@ describe("GET /health", () => {
     const response = await app.inject({ method: "GET", url: "/does-not-exist" });
 
     expect(response.statusCode).toBe(404);
+    expect(response.json()).toMatchObject({ error: "NotFound" });
   });
 });
