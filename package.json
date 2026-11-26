@@ -13,11 +13,13 @@
     "typecheck": "tsc --noEmit",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",
+    "db:migrate": "tsx --env-file-if-exists=.env src/scripts/migrate.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
-    "fastify": "^5.12.8"
+    "fastify": "^5.12.8",
+    "postgres": "^4.1.1"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
