@@ -1,0 +1,10 @@
+# Keep the build context small and never send secrets into the image.
+node_modules
+coverage
+.git
+.github
+.env
+.env.*
+*.log
+**/*.test.ts
+src/test
