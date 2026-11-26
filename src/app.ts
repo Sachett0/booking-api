@@ -1,6 +1,7 @@
 import Fastify, { type FastifyServerOptions } from "fastify";
 import type { Sql } from "./db.ts";
 import { registerErrorHandler } from "./errors.ts";
+import { resourceRoutes } from "./resources/resource.routes.ts";
 
 /** What the app needs from the outside world. */
 export interface AppDependencies {
@@ -24,6 +25,8 @@ export function buildApp(deps: AppDependencies, options: FastifyServerOptions = 
   app.get("/health", async () => {
     return { status: "ok" };
   });
+
+  app.register(resourceRoutes, { sql: deps.sql });
 
   return app;
 }

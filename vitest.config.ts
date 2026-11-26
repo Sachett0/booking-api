@@ -14,5 +14,8 @@ export default defineConfig({
     env: { DATABASE_URL: testDatabaseUrl },
     // Runs once before all test files: resets the test database schema.
     globalSetup: ["./src/test/global-setup.ts"],
+    // All test files share one database, so they run one at a time.
+    // Otherwise one file could clean tables while another is using them.
+    fileParallelism: false,
   },
 });
