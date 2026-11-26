@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from "fastify";
 import type { Sql } from "../db.ts";
-import { ConflictError, NotFoundError } from "../errors.ts";
+import { NotFoundError } from "../errors.ts";
 import { createResourceRepository } from "../resources/resource.repository.ts";
 import { resourceIdParams } from "../resources/resource.schemas.ts";
 import { createBookingRepository } from "./booking.repository.ts";
@@ -13,18 +13,8 @@ export const bookingRoutes: FastifyPluginAsync<{ sql: Sql }> = async (app, { sql
   app.post("/bookings", async (request, reply) => {
     const input = createBookingBody.parse(request.body);
 
-    const resource = await resources.findById(input.resourceId);
-    if (!resource) {
-      throw new NotFoundError(`Resource ${input.resourceId} not found.`);
-    }
-
-    // WARNING: "check, then insert" has a race condition. Two requests that
-    // arrive at the same time can both pass this check before either one
-    // inserts, and both get saved. Step 6 proves it and fixes it.
-    if (await bookings.hasOverlap(input)) {
-      throw new ConflictError("This time slot is already booked for this resource.");
-    }
-
+    // No "does the resource exist?" or "is this slot free?" checks here on
+    // purpose: create() does both safely inside one transaction (404 / 409).
     const booking = await bookings.create(input);
     return reply.status(201).send(booking);
   });
