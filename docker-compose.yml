@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: booking
+      POSTGRES_PASSWORD: booking
+      POSTGRES_DB: booking
+    ports:
+      - "5432:5432"
+    volumes:
+      # Keeps data between restarts. Remove with `docker compose down -v`.
+      - pgdata:/var/lib/postgresql
+      # Scripts here run once, the first time the volume is created.
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U booking -d booking"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:

@@ -1,6 +1,5 @@
 import { buildApp } from "./app.ts";
-
-const PORT = Number(process.env.PORT ?? 3333);
+import { config } from "./config.ts";
 
 const app = buildApp({ logger: true });
 
@@ -12,4 +11,4 @@ async function shutdown() {
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
-await app.listen({ port: PORT, host: "0.0.0.0" });
+await app.listen({ port: config.port, host: "0.0.0.0" });
