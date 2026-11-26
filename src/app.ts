@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import Fastify, { type FastifyServerOptions } from "fastify";
 import { bookingRoutes } from "./bookings/booking.routes.ts";
 import type { Sql } from "./db.ts";
@@ -19,7 +20,12 @@ export interface AppDependencies {
  * one is used: the real one in server.ts, the test one in tests.
  */
 export function buildApp(deps: AppDependencies, options: FastifyServerOptions = {}) {
-  const app = Fastify(options);
+  const app = Fastify({
+    // A unique id per request, shown in logs and in 500 responses, so a
+    // user's error report can be matched to the server log entry.
+    genReqId: () => randomUUID(),
+    ...options,
+  });
 
   registerErrorHandler(app);
 
