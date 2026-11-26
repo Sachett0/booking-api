@@ -1,4 +1,5 @@
 import Fastify, { type FastifyServerOptions } from "fastify";
+import { bookingRoutes } from "./bookings/booking.routes.ts";
 import type { Sql } from "./db.ts";
 import { registerErrorHandler } from "./errors.ts";
 import { resourceRoutes } from "./resources/resource.routes.ts";
@@ -27,6 +28,7 @@ export function buildApp(deps: AppDependencies, options: FastifyServerOptions = 
   });
 
   app.register(resourceRoutes, { sql: deps.sql });
+  app.register(bookingRoutes, { sql: deps.sql });
 
   return app;
 }

@@ -10,6 +10,17 @@ export class NotFoundError extends Error {
 }
 
 /**
+ * Thrown when a request clashes with the current state, such as a time slot
+ * that is already taken. Becomes a 409 response.
+ */
+export class ConflictError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ConflictError";
+  }
+}
+
+/**
  * Turns known errors into clear JSON responses.
  *
  * Anything not handled here falls back to Fastify's default handler, which
@@ -32,6 +43,13 @@ export function registerErrorHandler(app: FastifyInstance) {
     if (error instanceof NotFoundError) {
       return reply.status(404).send({
         error: "NotFound",
+        message: error.message,
+      });
+    }
+
+    if (error instanceof ConflictError) {
+      return reply.status(409).send({
+        error: "Conflict",
         message: error.message,
       });
     }
